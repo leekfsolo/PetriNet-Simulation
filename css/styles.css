@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
+
+body {
+  font-size: 1rem;
+  font-weight: Poppins;
+}
+
+h4 {
+  margin-bottom: 1em;
+}
+
+h5 {
+  text-transform: capitalize;
+}
+
+.form,
+label {
+  width: 100%;
+}
+
+.container-input {
+  display: flex;
+  justify-content: space-between;
+}
+
+input {
+  width: 88%;
+}
+
+button {
+  width: 12%;
+}
+
+.list-item {
+  height: 400px;
+}
+
+.place,
+.line-left,
+.line-right,
+.line-down,
+.line-up,
+.transition {
+  display: inline-block;
+  position: relative;
+}
+
+.petri-net {
+  position: absolute;
+}
+
+.place {
+  width: 100%;
+  height: 50px;
+  border: 1px solid black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.part {
+  max-width: 50px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.transition {
+  width: 100%;
+  height: 50px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.line-left,
+.line-right {
+  max-width: 100px;
+  width: 100%;
+  height: 1px;
+  background-color: black;
+  top: 15px;
+  left: 0px;
+}
+
+.line-left {
+  top: -15px;
+}
+
+.line-down,
+.line-up {
+  max-width: 55px;
+  width: 100%;
+  height: 1px;
+  background-color: black;
+  top: 0px;
+  left: 0px;
+  transform: rotate(90deg);
+}
+
+.line-left::before,
+.line-up::before {
+  content: '';
+  position: absolute;
+  right: 1px;
+  top: 0;
+  transform: translateY(-50%) rotate(-45deg);
+  border: solid black;
+  border-width: 0 1px 1px 0;
+  padding: 3px;
+}
+
+.line-right::before,
+.line-down::before {
+  content: '';
+  position: absolute;
+  left: 1px;
+  top: 0;
+  transform: translateY(-50%) rotate(135deg);
+  border: solid black;
+  border-width: 0 1px 1px 0;
+  padding: 3px;
+}
+
+.petri-net-1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.row-1,
+.row-2,
+.row-3 {
+  width: 100%;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.line-up-1 {
+  left: -122px;
+}
+
+.line-down-1 {
+  left: 123px;
+}
+
+.petri-net-2 .line-left {
+  top: 15px;
+}
