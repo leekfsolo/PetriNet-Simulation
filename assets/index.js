@@ -3,10 +3,11 @@
 const forms = document.querySelectorAll('form');
 const places_q1 = document.querySelectorAll('.petri-net-1 .place');
 const places_q2 = document.querySelectorAll('.petri-net-2 .place');
+const places_q3 = document.querySelectorAll('.petri-net-3 .place');
 
-const free_q1 = places_q1[0], docu_q1 = places_q1[1], busy_q1 = places_q1[2];
-const wait_q2 = places_q2[0], inside_q2 = places_q2[1], done_q2 = places_q2[2];
-
+const [free_q1, docu_q1, busy_q1] = [...places_q1];
+const [wait_q2, inside_q2, done_q2] = [...places_q2];
+const [free_q3, docu_q3, wait_q3, busy_q3, done_q3, inside_q3] = [...places_q3];
 
 const getModel_q1 = (free = 1, docu = 0, busy = 0) => {
 	const model = {
@@ -55,6 +56,32 @@ const getModel_q2 = (wait = 1, inside = 0, done = 0) => {
 	return model;
 };
 
+const getModel_q3 = (free = 1, docu = 0, wait = 1, busy = 0, done = 1, inside = 0) => {
+	const model = {
+		id: 'q3',
+		places: ['wait', 'inside', 'free', 'docu', 'busy', 'done'],
+		transitions: [
+			{
+				name: 'start',
+				preconditions: { 'wait': wait, 'free': free },
+				postconditions: { 'busy': busy, 'inside': inside }
+			},
+			{
+				name: 'change',
+				preconditions: { 'busy': busy, 'inside': inside },
+				postconditions: { 'docu': docu, 'done': done }
+			},
+			{
+				name: 'end',
+				preconditions: { 'docu': docu },
+				postconditions: { 'free': free }
+			}
+		],
+		marking: { 'free': free, 'docu': docu, 'wait': wait, 'busy': busy, 'done': done, 'inside': inside }
+	};
+	return model;
+};
+
 class PetriNet {
 	constructor(model) {
 		this.model = model;
@@ -67,6 +94,9 @@ class PetriNet {
 		}
 		else if (this.model.id === 'q2') {
 			targetPetriNet = places_q2;
+		}
+		else {
+			targetPetriNet = places_q3;
 		}
 
 		let m0 = [];
@@ -107,11 +137,15 @@ class PetriNet {
 			}
 
 			if (this.model.id === 'q1') {
-				const newNet = new PetriNet(getModel_q1(m0[0], m0[1], m0[2]));
+				const newNet = new PetriNet(getModel_q1(...m0));
 				this.model = newNet.model;
 			}
 			else if (this.model.id === 'q2') {
-				const newNet = new PetriNet(getModel_q2(m0[0], m0[1], m0[2]));
+				const newNet = new PetriNet(getModel_q2(...m0));
+				this.model = newNet.model;
+			}
+			else {
+				const newNet = new PetriNet(getModel_q3(...m0));
 				this.model = newNet.model;
 			}
 		}
@@ -121,6 +155,7 @@ class PetriNet {
 
 let petriNet_q1 = new PetriNet(getModel_q1());
 let petriNet_q2 = new PetriNet(getModel_q2(5));
+let petriNet_q3 = new PetriNet(getModel_q3(1, 0, 4));
 
 forms.forEach(form => form.addEventListener('submit', (e) => {
 	e.preventDefault();
@@ -141,6 +176,13 @@ forms.forEach(form => form.addEventListener('submit', (e) => {
 		const model_q2 = getModel_q2(tokens, inside, done);
 		petriNet_q2 = new PetriNet(model_q2);
 	}
+	else {
+		wait_q3.innerHTML = tokens;
+		const { free, busy, docu, inside, done } = petriNet_q3.model.marking;
+
+		const model_q3 = getModel_q3(free, docu, tokens, busy, done, inside);
+		petriNet_q3 = new PetriNet(model_q3);
+	}
 }));
 
 const transitions = document.querySelectorAll('.transition');
@@ -159,6 +201,11 @@ transitions.forEach(transition => transition.addEventListener('click', (e) => {
 			petriNet_q2.firing(target);
 
 			petriNet_q2.updateMarking();
+			break;
+		case netClassList.contains('petri-net-3'):
+			petriNet_q3.firing(target);
+
+			petriNet_q3.updateMarking();
 			break;
 	}
 }));

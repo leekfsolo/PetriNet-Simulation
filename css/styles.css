@@ -40,6 +40,8 @@ button {
 .line-right,
 .line-down,
 .line-up,
+.line-diag-down,
+.line-diag-up,
 .transition {
   display: inline-block;
   position: relative;
@@ -100,8 +102,27 @@ button {
   transform: rotate(90deg);
 }
 
+.line-diag-down,
+.line-diag-up {
+  width: 146px;
+  height: 1px;
+  background-color: black;
+  transform: rotate(45deg);
+  position: relative;
+  top: -10px;
+  left: -1px;
+}
+
+.line-diag-up {
+  top: -10px;
+  left: 1px;
+  transform: rotate(-45deg);
+}
+
 .line-left::before,
-.line-up::before {
+.line-up::before,
+.line-diag-down::before,
+.line-diag-up::before {
   content: '';
   position: absolute;
   right: 1px;
@@ -133,7 +154,9 @@ button {
 
 .row-1,
 .row-2,
-.row-3 {
+.row-3,
+.row-4,
+.row-5 {
   width: 100%;
   height: 70px;
   display: flex;
@@ -151,4 +174,8 @@ button {
 
 .petri-net-2 .line-left {
   top: 15px;
+}
+
+.petri-net-3 {
+  height: 400px;
 }
