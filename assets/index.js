@@ -81,7 +81,6 @@ const getModel_q3 = (free = 1, docu = 0, wait = 1, busy = 0, done = 1, inside = 
 	};
 	return model;
 };
-
 class PetriNet {
 	constructor(model) {
 		this.model = model;
@@ -115,13 +114,38 @@ class PetriNet {
 		const { preconditions, postconditions } = firingTrans;
 
 		let isValid = true;
+		let targetPetriNet;
+		if (this.model.id === 'q1') {
+			targetPetriNet = places_q1;
+		}
+		else if (this.model.id === 'q2') {
+			targetPetriNet = places_q2;
+		}
+		else {
+			targetPetriNet = places_q3;
+		}
 
 		for (const key in preconditions) {
-			if (preconditions[key] < 1) {
-				isValid = false;
-				transition.classList.add('invalid');
-				break;
-			}
+			targetPetriNet.forEach((x) => {
+				if (preconditions[key] < 1) {
+					if (x.classList[1] === key) {
+						x.classList.add('invalid');
+						setTimeout(() => {
+							x.classList.remove('invalid');
+						}, 500);
+					}
+					isValid = false;
+					transition.classList.add('invalid');
+				}
+				else {
+					if (x.classList[1] === key) {
+						x.classList.add('valid');
+						setTimeout(() => {
+							x.classList.remove('valid');
+						}, 500);
+					}
+				}
+			});
 		}
 
 		if (isValid) {
