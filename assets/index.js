@@ -16,21 +16,21 @@ const getModel_q1 = (free = 1, docu = 0, busy = 0) => {
 		transitions: [
 			{
 				name: 'start',
-				preconditions: { 'free': free },
-				postconditions: { 'busy': busy }
+				preconditions: { free },
+				postconditions: { busy }
 			},
 			{
 				name: 'change',
-				preconditions: { 'busy': busy },
-				postconditions: { 'docu': docu }
+				preconditions: { busy },
+				postconditions: { docu }
 			},
 			{
 				name: 'end',
-				preconditions: { 'docu': docu },
-				postconditions: { 'free': free }
+				preconditions: { docu },
+				postconditions: { free }
 			}
 		],
-		marking: { 'free': free, 'docu': docu, 'busy': busy }
+		marking: { free, docu, busy }
 	};
 	return model;
 };
@@ -42,16 +42,16 @@ const getModel_q2 = (wait = 1, inside = 0, done = 0) => {
 		transitions: [
 			{
 				name: 'start',
-				preconditions: { 'wait': wait },
-				postconditions: { 'inside': inside }
+				preconditions: { wait },
+				postconditions: { inside }
 			},
 			{
 				name: 'change',
-				preconditions: { 'inside': inside },
-				postconditions: { 'done': done }
+				preconditions: { inside },
+				postconditions: { done }
 			}
 		],
-		marking: { 'wait': wait, 'inside': inside, 'done': done }
+		marking: { wait, inside, done }
 	};
 	return model;
 };
@@ -63,21 +63,21 @@ const getModel_q3 = (free = 1, docu = 0, wait = 1, busy = 0, done = 1, inside = 
 		transitions: [
 			{
 				name: 'start',
-				preconditions: { 'wait': wait, 'free': free },
-				postconditions: { 'busy': busy, 'inside': inside }
+				preconditions: { wait, free },
+				postconditions: { busy, inside }
 			},
 			{
 				name: 'change',
-				preconditions: { 'busy': busy, 'inside': inside },
-				postconditions: { 'docu': docu, 'done': done }
+				preconditions: { busy, inside },
+				postconditions: { docu, done }
 			},
 			{
 				name: 'end',
-				preconditions: { 'docu': docu },
-				postconditions: { 'free': free }
+				preconditions: { docu },
+				postconditions: { free }
 			}
 		],
-		marking: { 'free': free, 'docu': docu, 'wait': wait, 'busy': busy, 'done': done, 'inside': inside }
+		marking: { free, docu, wait, busy, done, inside }
 	};
 	return model;
 };
@@ -109,7 +109,7 @@ class PetriNet {
 		}
 	}
 
-	firing(name) {
+	firing(name, transition) {
 		const { transitions, marking } = this.model;
 		const firingTrans = transitions.find(key => key.name === name);
 		const { preconditions, postconditions } = firingTrans;
@@ -119,11 +119,14 @@ class PetriNet {
 		for (const key in preconditions) {
 			if (preconditions[key] < 1) {
 				isValid = false;
+				transition.classList.add('invalid');
 				break;
 			}
 		}
 
 		if (isValid) {
+			transition.classList.add('valid');
+
 			for (const key in preconditions) {
 				marking[key]--;
 			}
@@ -193,19 +196,31 @@ transitions.forEach(transition => transition.addEventListener('click', (e) => {
 
 	switch (true) {
 		case netClassList.contains('petri-net-1'):
-			petriNet_q1.firing(target);
+			petriNet_q1.firing(target, transition);
 
-			petriNet_q1.updateMarking();
+			setTimeout(() => {
+				petriNet_q1.updateMarking();
+				transition.classList.remove('valid');
+				transition.classList.remove('invalid');
+			}, 500);
 			break;
 		case netClassList.contains('petri-net-2'):
-			petriNet_q2.firing(target);
+			petriNet_q2.firing(target, transition);
 
-			petriNet_q2.updateMarking();
+			setTimeout(() => {
+				petriNet_q2.updateMarking();
+				transition.classList.remove('valid');
+				transition.classList.remove('invalid');
+			}, 500);
 			break;
 		case netClassList.contains('petri-net-3'):
-			petriNet_q3.firing(target);
+			petriNet_q3.firing(target, transition);
 
-			petriNet_q3.updateMarking();
+			setTimeout(() => {
+				petriNet_q3.updateMarking();
+				transition.classList.remove('valid');
+				transition.classList.remove('invalid');
+			}, 500);
 			break;
 	}
 }));
