@@ -18,6 +18,10 @@ label {
   width: 100%;
 }
 
+.container {
+  margin-top: 6em;
+}
+
 .container-input {
   display: flex;
   justify-content: space-between;
@@ -180,12 +184,43 @@ button {
   height: 400px;
 }
 
+.notification {
+  width: 100vw;
+  height: 80px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  color: white;
+  background-color: #1a8ed1;
+  padding: 0.5% 10rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification p {
+  font-size: 1.5rem;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.success {
+  background-color: #1ad1b9;
+}
+
+.error {
+  background-color: #a70d0d;
+}
+
 .valid {
-  animation: successFiring 0.5s;
+  animation: successFiring 1s;
 }
 
 .invalid {
-  animation: failedFiring 0.5s;
+  animation: failedFiring 1s;
 }
 
 @keyframes successFiring {

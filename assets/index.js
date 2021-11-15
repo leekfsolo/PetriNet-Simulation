@@ -1,4 +1,7 @@
 // Variables Declaration
+const noti = document.querySelector(".notification");
+const h2 = document.querySelector(".notification h2");
+const p = document.querySelector(".notification p");
 
 const forms = document.querySelectorAll('form');
 const places_q1 = document.querySelectorAll('.petri-net-1 .place');
@@ -8,6 +11,31 @@ const places_q3 = document.querySelectorAll('.petri-net-3 .place');
 const [free_q1, docu_q1, busy_q1] = [...places_q1];
 const [wait_q2, inside_q2, done_q2] = [...places_q2];
 const [free_q3, docu_q3, wait_q3, busy_q3, done_q3, inside_q3] = [...places_q3];
+
+const hiddenMsg = () => {
+	noti.classList.add('hidden');
+};
+
+const sendingMsg = () => {
+	noti.classList.remove('hidden', 'error', 'success');
+
+	h2.innerHTML = "Sending...";
+	p.innerHTML = "Firing Transition...";
+};
+
+const successMsg = () => {
+	noti.classList.add('success');
+
+	h2.innerHTML = "Success";
+	p.innerHTML = "Firing Transition Successfully !!!";
+};
+
+const errorMsg = () => {
+	noti.classList.add('error');
+
+	h2.innerHTML = "Error";
+	p.innerHTML = "Firing Transition Failed !!!";
+};
 
 const getModel_q1 = (free = 1, docu = 0, busy = 0) => {
 	const model = {
@@ -131,7 +159,10 @@ class PetriNet {
 					if (x.classList[1] === key) {
 						x.classList.add('invalid');
 						setTimeout(() => {
-							x.classList.remove('invalid');
+							errorMsg();
+							setTimeout(() => {
+								x.classList.remove('invalid');
+							}, 500);
 						}, 500);
 					}
 					isValid = false;
@@ -141,7 +172,10 @@ class PetriNet {
 					if (x.classList[1] === key) {
 						x.classList.add('valid');
 						setTimeout(() => {
-							x.classList.remove('valid');
+							successMsg();
+							setTimeout(() => {
+								x.classList.remove('valid');
+							}, 500);
 						}, 500);
 					}
 				}
@@ -178,7 +212,8 @@ class PetriNet {
 		}
 	}
 }
-// QUESTION 1
+
+let key = 0;
 
 let petriNet_q1 = new PetriNet(getModel_q1());
 let petriNet_q2 = new PetriNet(getModel_q2(5));
@@ -215,6 +250,8 @@ forms.forEach(form => form.addEventListener('submit', (e) => {
 const transitions = document.querySelectorAll('.transition');
 
 transitions.forEach(transition => transition.addEventListener('click', (e) => {
+	key = window.scrollY;
+	sendingMsg();
 	const netClassList = e.path[3].classList;
 	const target = e.path[1].classList[1];
 
@@ -248,3 +285,11 @@ transitions.forEach(transition => transition.addEventListener('click', (e) => {
 			break;
 	}
 }));
+
+window.addEventListener('scroll', () => {
+	if (Math.abs(window.scrollY - key) > 100) {
+		hiddenMsg();
+	}
+});
+
+
