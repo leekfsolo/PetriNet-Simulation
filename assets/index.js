@@ -160,9 +160,7 @@ class PetriNet {
 						x.classList.add('invalid');
 						setTimeout(() => {
 							errorMsg();
-							setTimeout(() => {
-								x.classList.remove('invalid');
-							}, 500);
+							x.classList.remove('invalid');
 						}, 500);
 					}
 					isValid = false;
@@ -173,9 +171,7 @@ class PetriNet {
 						x.classList.add('valid');
 						setTimeout(() => {
 							successMsg();
-							setTimeout(() => {
-								x.classList.remove('valid');
-							}, 500);
+							x.classList.remove('valid');
 						}, 500);
 					}
 				}
