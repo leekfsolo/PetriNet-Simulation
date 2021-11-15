@@ -199,6 +199,12 @@ button {
   align-items: center;
 }
 
+.notification h2,
+.notification p {
+  margin: 0;
+  padding: 0;
+}
+
 .notification p {
   font-size: 1.5rem;
 }
